@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Наталия Хохлова](https://up.htmlacademy.ru/javascript/25/user/1881369).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Зубко](https://htmlacademy.ru/profile/whatislove).
 
 ---
 
