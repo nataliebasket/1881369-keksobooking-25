@@ -10,7 +10,7 @@
 //   return ((Math.random() * (secondValue - firstValue)) + firstValue).toFixed(num);
 // };
 
-const NUMBER_ADS = 10;
+const ADS_NUMBERS = 10;
 const ADS_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const CHECK_IN = ['12:00', '13:00', '14:00'];
 const CHECK_OUT = ['12:00', '13:00', '14:00'];
@@ -19,7 +19,7 @@ const ADS_TITLES = [
   'Тихое, уютное место для двоих',
   'Светлое, просторное место',
   'Всё по фен шую, как вы ждали',
-  'Вам захочется приехать ещё раз'
+  'Вам захочется приехать сюда ещё раз'
 ];
 const ADS_FEATURES = ['wifi', 'dishwasher', 'parking', 'elevator', 'conditioner'];
 const ADS_DISCRIPTION = [
@@ -50,19 +50,19 @@ const getRandomPositiveFloat = (a, b, digits = 1) => {
 
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
-const createAutor = (avatarNumber) => ({
-  avatar: `img/avatars/user${avatarNumber}.png`,
-});
-
 const createRandomArray = (values) => {
   const features = new Array(getRandomPositiveInteger(1, values.length));
   for (let i = 0; i < features.length; i++) {features[i] = values[i];}
   return features;
 };
 
-const createOffer = () => ({
+const createAutor = (avatarNumber) => ({
+  avatar: `img/avatars/user${avatarNumber}.png`,
+});
+
+const createOffer = (lat, lng) => ({
   title: getRandomArrayElement(ADS_TITLES),
-  adress: this.loc,
+  address: `${lat} ${lng}`,
   price: getRandomPositiveInteger(1000, 5000),
   type: getRandomArrayElement(ADS_TYPES),
   rooms: getRandomPositiveInteger(1, 5),
@@ -74,28 +74,28 @@ const createOffer = () => ({
   photos: createRandomArray(ADS_PHOTOS),
 });
 
-const createLocation = () => ({
-  lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
-  lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+const createLocation = (lat, lng) => ({
+  lat,
+  lng,
 });
 
-const createAd = (avatarNumber) => ({
-  author: createAutor(avatarNumber),
-  location: createLocation(),
-  loc: this.location.lat,
-  offer: createOffer(),
-});
+const createAd = (avatarNumber) => {
+  const lat = getRandomPositiveFloat(35.65000, 35.70000, 5);
+  const lng = getRandomPositiveFloat(139.70000, 139.80000, 5);
+  return {
+    author: createAutor(avatarNumber),
+    location: createLocation(lat, lng),
+    offer: createOffer(lat, lng),
+  };
+};
 
 const createAds = () => {
-  const massiveObjects = [];
-  for (let i = 1; i <= NUMBER_ADS; i++) {
+  const massiveAds = [];
+  for (let i = 1; i <= ADS_NUMBERS; i++) {
     const avatarNumber = (i < 10) ? `0${i}` : `${i}`;
-    massiveObjects.push(createAd(avatarNumber));
+    massiveAds.push(createAd(avatarNumber));
   }
-  return massiveObjects;
+  return massiveAds;
 };
 
 createAds();
-
-// console.log (createAds[2].location.lat);
-console.log(createAds()[2].loc);
