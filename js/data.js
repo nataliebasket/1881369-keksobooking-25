@@ -1,23 +1,24 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray} from './util.js';
 
-const ADS_NUMBERS = 10;
-
 const ADS_TYPES = [
   'palace',
   'flat',
   'house',
   'bungalow',
-  'hotel'];
+  'hotel'
+];
 
 const CHECK_IN = [
   '12:00',
   '13:00',
-  '14:00'];
+  '14:00'
+];
 
 const CHECK_OUT = [
   '12:00',
   '13:00',
-  '14:00'];
+  '14:00'
+];
 
 const ADS_TITLES = [
   'Просторное помещение',
@@ -32,7 +33,8 @@ const ADS_FEATURES = [
   'dishwasher',
   'parking',
   'elevator',
-  'conditioner'];
+  'conditioner'
+];
 
 const ADS_DISCRIPTIONS = [
   'Все окна на север',
@@ -80,8 +82,8 @@ const createAd = (avatarNumber) => {
   };
 };
 
-const createAds = () => {
-  const ads = Array.from({length: ADS_NUMBERS} , (ad, i) => {
+const createAds = (count) => {
+  const ads = Array.from({length: count} , (ad, i) => {
     const avatarNumber = (i + 1 < 10) ? `0${i + 1}` : `${i + 1}`;
     ad = createAd(avatarNumber);
     return ad;
