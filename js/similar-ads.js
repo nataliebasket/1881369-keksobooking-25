@@ -1,7 +1,3 @@
-import {createAds} from './data.js';
-
-const COUNT_OF_ADS = 10;
-
 const ADS_TYPE_CAPTIONS = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -10,10 +6,7 @@ const ADS_TYPE_CAPTIONS = {
   hotel: 'Отель',
 };
 
-const similarListElement = document.querySelector('#map-canvas');
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
-
-const similarAds = createAds(COUNT_OF_ADS);
 
 const createPhotoElements = (photoArray, parentElement) => {
   photoArray.forEach((photo) => {
@@ -80,4 +73,5 @@ const createPopup = (ad) => {
   return adElement;
 };
 
-similarListElement.append(createPopup(similarAds[0]));
+export {createPopup};
+
