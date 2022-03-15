@@ -1,3 +1,5 @@
+import {numDecline} from'./util.js';
+
 const ADS_TYPE_CAPTIONS = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -32,7 +34,7 @@ const checkAvailableData = (data, element) => {
   }
 };
 
-const createPopup = (ad) => {
+const createPopup = ({offer, author}) => {
   const adElement = similarAdTemplate.cloneNode(true);
 
   const adTitle = adElement.querySelector('.popup__title');
@@ -47,28 +49,28 @@ const createPopup = (ad) => {
   const featuresList = adElement.querySelectorAll('.popup__feature');
   const adPhotos = adElement.querySelector('.popup__photos');
 
-  adTitle.textContent = ad.offer.title;
-  adAddress.textContent = ad.offer.address;
-  adPrice.textContent = `${ad.offer.price} ₽/ночь`;
-  adType.textContent = ADS_TYPE_CAPTIONS[ad.offer.type];
-  adCapacity.textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
-  adTime.textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
-  adDescription.textContent = ad.offer.description;
-  adAvatar.src = ad.author.avatar;
+  adTitle.textContent = offer.title;
+  adAddress.textContent = offer.address;
+  adPrice.textContent = `${offer.price} ₽/ночь`;
+  adType.textContent = ADS_TYPE_CAPTIONS[offer.type];
+  adCapacity.textContent = `${offer.rooms} ${numDecline(offer.rooms, 'комната', 'комнаты', 'комнат')} для ${offer.guests} ${numDecline(offer.guests, 'гостя', 'гостей', 'гостей')}`;
+  adTime.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  adDescription.textContent = offer.description;
+  adAvatar.src = author.avatar;
 
-  checkAvailableData(ad.offer.title, adTitle);
-  checkAvailableData(ad.offer.address, adAddress);
-  checkAvailableData(ad.offer.price, adPrice);
-  checkAvailableData(ad.offer.type, adType);
-  checkAvailableData(ad.offer.rooms, adCapacity);
-  checkAvailableData(ad.offer.checkin, adTime);
-  checkAvailableData(ad.offer.description, adDescription);
-  checkAvailableData(ad.author.avatar, adAvatar);
-  checkAvailableData(ad.offer.features, adFeatures);
-  checkAvailableData(ad.offer.photos, adPhotos);
+  checkAvailableData(offer.title, adTitle);
+  checkAvailableData(offer.address, adAddress);
+  checkAvailableData(offer.price, adPrice);
+  checkAvailableData(offer.type, adType);
+  checkAvailableData(offer.rooms, adCapacity);
+  checkAvailableData(offer.checkin, adTime);
+  checkAvailableData(offer.description, adDescription);
+  checkAvailableData(author.avatar, adAvatar);
+  checkAvailableData(offer.features, adFeatures);
+  checkAvailableData(offer.photos, adPhotos);
 
-  createFeatureElements(featuresList, ad.offer.features, 'popup__feature--');
-  createPhotoElements(ad.offer.photos, adPhotos);
+  createFeatureElements(featuresList, offer.features, 'popup__feature--');
+  createPhotoElements(offer.photos, adPhotos);
 
   return adElement;
 };
