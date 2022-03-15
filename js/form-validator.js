@@ -103,9 +103,9 @@ timeOut.addEventListener('change', () => {
 form.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if (isValid) {
-    alert('Можно отправлять');
+    //alert('Можно отправлять');
   } else {
     evt.preventDefault();
-    alert('Форма невалидна');
+    //alert('Форма невалидна');
   }
 });

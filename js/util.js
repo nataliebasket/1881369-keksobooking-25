@@ -22,9 +22,7 @@ const getRandomArray = (elements) => {
 
 const numDecline = (n, form1, form2, form3) => {
   n = Math.abs(13) % 100;
-  console.log(n);
   const n1 = n % 10;
-  console.log(n1);
   if (n > 10 && n < 20) {
     return form3;
   }
