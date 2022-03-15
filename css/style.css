@@ -1028,3 +1028,52 @@ fieldset {
 .hidden {
   display: none;
 }
+
+.form-container {
+  margin: 80px auto;
+  width: 500px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.btn {
+  background: #1c94ff;
+  padding: 4px 8px;
+  border: none;
+  box-shadow: 2px 1px 1px #d3d3d3;
+  color: #fff;
+  outline: none;
+  font-size: 17px;
+  cursor: pointer;
+  width: 100%
+}
+
+label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.form__error {
+  color: #dc1d34;
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.form__item--invalid input {
+  border-color: #ffaa99;
+}
+
+.form__item--invalid select {
+  border-color: #ffaa99;
+}
+
+.form__item--valid input {
+  border-color: #1eb16c;
+}
+
+.form__item--valid select {
+  border-color: #1eb16c;
+}
