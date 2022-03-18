@@ -1,12 +1,28 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray} from './util.js';
 
-const ADS_TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungalow',
-  'hotel'
-];
+const ADS_TYPES = {
+  palace: 'palace',
+  flat: 'flat',
+  house: 'house',
+  bungalow: 'bungalow',
+  hotel: 'hotel',
+};
+
+const AD_TYPES_TO_READABLE = {
+  [ADS_TYPES.palace]: 'Дворец',
+  [ADS_TYPES.flat]: 'Квартира',
+  [ADS_TYPES.house]: 'Дом',
+  [ADS_TYPES.bungalow]: 'Бунгало',
+  [ADS_TYPES.hotel]: 'Отель',
+};
+
+const AD_TYPES_TO_PRICE = {
+  [ADS_TYPES.palace]: 10000,
+  [ADS_TYPES.flat]: 1000,
+  [ADS_TYPES.house]: 5000,
+  [ADS_TYPES.bungalow]: 0,
+  [ADS_TYPES.hotel]: 3000,
+};
 
 const CHECK_IN = [
   '12:00',
@@ -58,7 +74,7 @@ const createOffer = (lat, lng) => ({
   title: getRandomArrayElement(ADS_TITLES),
   address: `${lat} ${lng}`,
   price: getRandomPositiveInteger(1000, 5000),
-  type: getRandomArrayElement(ADS_TYPES),
+  type: getRandomArrayElement(Object.values(ADS_TYPES)),
   rooms: getRandomPositiveInteger(1, 5),
   guests: getRandomPositiveInteger(1, 10),
   checkin: getRandomArrayElement(CHECK_IN),
@@ -92,4 +108,4 @@ const createAds = (count) => {
   return ads;
 };
 
-export {createAds};
+export {createAds, ADS_TYPES, AD_TYPES_TO_READABLE, AD_TYPES_TO_PRICE};
