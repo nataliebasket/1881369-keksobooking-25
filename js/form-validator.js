@@ -1,4 +1,4 @@
-import {AD_TYPES_TO_PRICE} from'./data.js';
+import {adTypesToPrice} from'./data.js';
 
 const form = document.querySelector('.ad-form');
 const adPrice = document.querySelector('#price');
@@ -28,8 +28,8 @@ const validateAdForm = () => {
   });
 
   // Валидация цены и типа жилья
-  const validateAdPrice = (value) => value >= AD_TYPES_TO_PRICE[adType.value] && value <= 100000;
-  const getAdTypeErrorMessage = () => `Минимальная цена за ночь: ${AD_TYPES_TO_PRICE[adType.value]}`;
+  const validateAdPrice = (value) => value >= adTypesToPrice[adType.value] && value <= 100000;
+  const getAdTypeErrorMessage = () => `Минимальная цена за ночь: ${adTypesToPrice[adType.value]}`;
 
   pristine.addValidator(
     adPrice,
@@ -38,8 +38,8 @@ const validateAdForm = () => {
   );
 
   const onAdTypeChange = function () {
-    adPrice.min = AD_TYPES_TO_PRICE[this.value];
-    adPrice.placeholder =  AD_TYPES_TO_PRICE[this.value];
+    adPrice.min = adTypesToPrice[this.value];
+    adPrice.placeholder =  adTypesToPrice[this.value];
     pristine.validate(adPrice);
   };
 
