@@ -1,12 +1,5 @@
 import {numDecline} from'./util.js';
-
-const ADS_TYPE_CAPTIONS = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-  hotel: 'Отель',
-};
+import {AD_TYPES_TO_READABLE} from'./data.js';
 
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
@@ -52,7 +45,7 @@ const createPopup = ({offer, author}) => {
   adTitle.textContent = offer.title;
   adAddress.textContent = offer.address;
   adPrice.textContent = `${offer.price} ₽/ночь`;
-  adType.textContent = ADS_TYPE_CAPTIONS[offer.type];
+  adType.textContent = AD_TYPES_TO_READABLE[offer.type];
   adCapacity.textContent = `${offer.rooms} ${numDecline(offer.rooms, 'комната', 'комнаты', 'комнат')} для ${offer.guests} ${numDecline(offer.guests, 'гостя', 'гостей', 'гостей')}`;
   adTime.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   adDescription.textContent = offer.description;

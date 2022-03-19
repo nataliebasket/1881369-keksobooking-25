@@ -20,8 +20,9 @@ const getRandomArray = (elements) => {
   return features;
 };
 
+// Склонение существительных после числительного
 const numDecline = (n, form1, form2, form3) => {
-  n = Math.abs(13) % 100;
+  n = Math.abs(n) % 100;
   const n1 = n % 10;
   if (n > 10 && n < 20) {
     return form3;
