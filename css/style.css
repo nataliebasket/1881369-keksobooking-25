@@ -1053,3 +1053,22 @@ fieldset {
 .hidden {
   display: none;
 }
+
+.ad-form__error {
+  color: #dc1d34;
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+.ad-form__item--invalid input {
+  border-color: #ffaa99;
+}
+
+.ad-form__item--invalid select {
+  border-color: #ffaa99;
+}
+
+.ad-form__slider {
+  margin-top: 5px;
+}

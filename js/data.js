@@ -1,27 +1,27 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray} from './util.js';
 
-const ADS_TYPES = {
-  palace: 'palace',
-  flat: 'flat',
-  house: 'house',
-  bungalow: 'bungalow',
-  hotel: 'hotel',
+const AdsTypes = {
+  PALACE: 'palace',
+  FLAT: 'flat',
+  HOUSE: 'house',
+  BUNGALOW: 'bungalow',
+  HOTEL: 'hotel',
 };
 
-const AD_TYPES_TO_READABLE = {
-  [ADS_TYPES.palace]: 'Дворец',
-  [ADS_TYPES.flat]: 'Квартира',
-  [ADS_TYPES.house]: 'Дом',
-  [ADS_TYPES.bungalow]: 'Бунгало',
-  [ADS_TYPES.hotel]: 'Отель',
+const adTypesToReadable = {
+  [AdsTypes.PALACE]: 'Дворец',
+  [AdsTypes.FLAT]: 'Квартира',
+  [AdsTypes.HOUSE]: 'Дом',
+  [AdsTypes.BUNGALOW]: 'Бунгало',
+  [AdsTypes.HOTEL]: 'Отель',
 };
 
-const AD_TYPES_TO_PRICE = {
-  [ADS_TYPES.palace]: 10000,
-  [ADS_TYPES.flat]: 1000,
-  [ADS_TYPES.house]: 5000,
-  [ADS_TYPES.bungalow]: 0,
-  [ADS_TYPES.hotel]: 3000,
+const adTypesToPrice = {
+  [AdsTypes.PALACE]: 10000,
+  [AdsTypes.FLAT]: 1000,
+  [AdsTypes.HOUSE]: 5000,
+  [AdsTypes.BUNGALOW]: 0,
+  [AdsTypes.HOTEL]: 3000,
 };
 
 const CHECK_IN = [
@@ -73,8 +73,7 @@ const createAutor = (avatarNumber) => ({
 const createOffer = (lat, lng) => ({
   title: getRandomArrayElement(ADS_TITLES),
   address: `${lat} ${lng}`,
-  price: getRandomPositiveInteger(1000, 5000),
-  type: getRandomArrayElement(Object.values(ADS_TYPES)),
+  type: getRandomArrayElement(Object.values(AdsTypes)),
   rooms: getRandomPositiveInteger(1, 5),
   guests: getRandomPositiveInteger(1, 10),
   checkin: getRandomArrayElement(CHECK_IN),
@@ -108,4 +107,4 @@ const createAds = (count) => {
   return ads;
 };
 
-export {createAds, ADS_TYPES, AD_TYPES_TO_READABLE, AD_TYPES_TO_PRICE};
+export {createAds, AdsTypes, adTypesToReadable, adTypesToPrice};

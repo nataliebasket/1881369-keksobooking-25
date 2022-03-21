@@ -1,12 +1,10 @@
-import {validateAdForm} from './form-validator.js';
-import {createPopup} from './similar-ads.js';
-//import {toggleFormDisabled} from './form-switcher.js';
-import {createAds} from './data.js';
+import {loadMap} from './map.js';
+import {toggleFormDisabled} from './form-switcher.js';
 import './form-validator.js';
 
-const COUNT_OF_ADS = 10;
-const similarAds = createAds(COUNT_OF_ADS);
+toggleFormDisabled(true);
+setTimeout(loadMap, 1000);
 
-document.querySelector('#map-canvas').append(createPopup(similarAds[0]));
 
-validateAdForm();
+//document.querySelector('#map-canvas').append(createPopup(similarAds[0]));
+
