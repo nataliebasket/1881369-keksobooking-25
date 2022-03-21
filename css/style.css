@@ -1068,3 +1068,7 @@ fieldset {
 .ad-form__item--invalid select {
   border-color: #ffaa99;
 }
+
+.ad-form__slider {
+  margin-top: 5px;
+}
