@@ -1,7 +1,10 @@
-
-import {toggleFormDisabled} from './form-switcher.js';
-import {createAds} from './data.js';
+//import {createAds} from './data.js';
 import {createPopup} from './similar-ads.js';
+import {getData} from './api.js';
+import {toggleFormDisabled} from './form-switcher.js';
+
+//const resetFormButton = document.querySelector('.ad-form__reset');
+const COUNT_OF_ADS = 10;
 
 const MAIN_LOCATION = {
   lat: 35.675178,
@@ -9,8 +12,6 @@ const MAIN_LOCATION = {
 };
 
 const mainPinLocation = document.querySelector('#address');
-
-const COUNT_OF_ADS = 10;
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -31,66 +32,63 @@ const getLocationToString = (obj, number) => {
   return `${lat}, ${lng}`;
 };
 
+toggleFormDisabled(true);
+
+const map = L.map('map-canvas')
+  .on('load', () => {
+    toggleFormDisabled(false); // открытие - показ формы
+  })
+  .setView(MAIN_LOCATION, 13);
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
+
 // Добавление главной метки на карту
-const loadMainPin = (map) => {
-  const mainPinMarker = L.marker(
-    MAIN_LOCATION,
+const mainPinMarker = L.marker(
+  MAIN_LOCATION,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+mainPinMarker.addTo(map);
+mainPinLocation.value = getLocationToString(mainPinMarker.getLatLng(), 5);
+
+mainPinMarker.on('moveend', (evt) => {
+  mainPinLocation.value = getLocationToString(evt.target.getLatLng(), 5);
+});
+
+
+const markerGroup = L.layerGroup().addTo(map);
+
+const createMarker = (ad) => {
+  const marker = L.marker(
     {
-      draggable: true,
-      icon: mainPinIcon,
+      lat: ad.location.lat,
+      lng: ad.location.lng,
     },
+    {
+      icon: similarPinIcon,
+    }
   );
-  mainPinMarker.addTo(map);
-  mainPinLocation.value = getLocationToString(mainPinMarker.getLatLng(), 5);
-
-  mainPinMarker.on('moveend', (evt) => {
-    mainPinLocation.value = getLocationToString(evt.target.getLatLng(), 5);
-
-  });
+  marker
+    .addTo(markerGroup)
+    .bindPopup(createPopup(ad));
 };
 
-// Добавление меток похожих объявлений на карту
-const loadSimilarPins = (map) => {
-  const overPoints = createAds(COUNT_OF_ADS);
-  const markerGroup = L.layerGroup().addTo(map);
+const getAds = getData(createMarker, COUNT_OF_ADS);
+getAds();
 
-  const createMarker = (ad) => {
-    const marker = L.marker(
-      {
-        lat: ad.location.lat,
-        lng: ad.location.lng,
-      },
-      {
-        icon: similarPinIcon,
-      }
-    );
-    marker
-      .addTo(markerGroup)
-      .bindPopup(createPopup(ad));
-  };
-
-  overPoints.forEach((ad) => {
-    createMarker(ad);
-  });
-  //markerGroup.clearLayers();
+const resetMainPin = () => {
+  mainPinMarker.setLatLng(MAIN_LOCATION);
+  map.setView(MAIN_LOCATION, 13);
+  map.closePopup();
 };
 
-// Инициализация карты
-const loadMap = () => {
-  const map = L.map('map-canvas')
-    .on('load', () => {
-      toggleFormDisabled(false);
-    })
-    .setView(MAIN_LOCATION, 13);
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
+//loadSimilarPins(map);
+//};
 
-  loadMainPin(map);
-  loadSimilarPins(map);
-};
-
-export {loadMap};
+export {resetMainPin, MAIN_LOCATION, getLocationToString, mainPinLocation};

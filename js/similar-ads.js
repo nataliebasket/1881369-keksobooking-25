@@ -21,8 +21,8 @@ const createFeatureElements = (list, featuresArray, nameClass) => {
   });
 };
 
-const checkAvailableData = (data, element) => {
-  if (!data) {
+const checkAvailableData = (key, element) => {
+  if (typeof key === 'undefined') {
     element.hidden = true;
   }
 };
@@ -62,8 +62,17 @@ const createPopup = ({offer, author}) => {
   checkAvailableData(offer.features, adFeatures);
   checkAvailableData(offer.photos, adPhotos);
 
-  createFeatureElements(featuresList, offer.features, 'popup__feature--');
-  createPhotoElements(offer.photos, adPhotos);
+  if (typeof offer['features'] !== 'undefined') {
+    createFeatureElements(featuresList, offer.features, 'popup__feature--');
+  } else {
+    adFeatures.hidden = true;
+  }
+
+  if (typeof offer['photos'] !== 'undefined') {
+    createPhotoElements(offer.photos, adPhotos);
+  } else {
+    adPhotos.hidden = true;
+  }
 
   return adElement;
 };
