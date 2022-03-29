@@ -7,7 +7,6 @@ const roomNumber = document.querySelector('#room_number');
 const capacity = document.querySelector('#capacity');
 const timeIn = document.querySelector('#timein');
 const timeOut = document.querySelector('#timeout');
-const sliderPrice = document.querySelector('.ad-form__slider');
 const adTimeInOut = document.querySelector('.ad-form__element--time');
 
 const MAX_PRICE_FOR_NIGHT = 100000;
@@ -28,6 +27,7 @@ const pristine = new Pristine(form, {
   errorTextClass: 'ad-form__error',
 });
 
+//const validateAdForm = () => {
 // Валидация цены и типа жилья
 const validateAdPrice = (value) => value >= adTypesToPrice[adType.value] && value <= MAX_PRICE_FOR_NIGHT;
 const getAdTypeErrorMessage = () => `Минимальная цена за ночь: ${adTypesToPrice[adType.value]}`;
@@ -41,13 +41,9 @@ pristine.addValidator(
 const onAdTypeChange = function () {
   adPrice.min = adTypesToPrice[this.value];
   adPrice.placeholder =  adTypesToPrice[this.value];
-  sliderPrice.noUiSlider.updateOptions({
-    range: {
-      min: adTypesToPrice[this.value],
-      max: MAX_PRICE_FOR_NIGHT,
-    }
-  });
-  pristine.validate(adPrice);
+  if (adPrice.value) {
+    pristine.validate(adPrice);
+  }
 };
 
 adType.addEventListener('change', onAdTypeChange);
@@ -73,33 +69,4 @@ const onTimeInOutChange = (evt) => {
 
 adTimeInOut.addEventListener('change', onTimeInOutChange);
 
-form.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
-  if (isValid) {
-    //alert('Можно отправлять');
-  } else {
-    evt.preventDefault();
-    //alert('Форма невалидна');
-  }
-});
-
-// Слайдер цены
-noUiSlider.create(sliderPrice, {
-  range: {
-    min: adTypesToPrice[adType.value],
-    max: MAX_PRICE_FOR_NIGHT,
-  },
-  start: adTypesToPrice[adType.value],
-  step: 100,
-});
-
-sliderPrice.noUiSlider.on('slide', () => {
-  adPrice.value = sliderPrice.noUiSlider.get();
-  pristine.validate(adPrice);
-});
-
-adPrice.addEventListener('change', () => {
-  sliderPrice.noUiSlider.set(adPrice.value);
-});
-
-//export {validateAdForm};
+export {adPrice, pristine};
