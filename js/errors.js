@@ -55,7 +55,6 @@ const openErrorSendMessage = () => {
 
   closeButton.addEventListener('click', onMouseErrorClickDown);
   mainDocument.addEventListener('keydown', onMessageErrorEscDown);
-  //errorGetElement.addEventListener('click', onMouseErrorClickDown);
 };
 
 function closeErrorSendMessage () {

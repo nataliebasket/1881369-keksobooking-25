@@ -1,15 +1,18 @@
-//import {createAds} from './data.js';
 import {createPopup} from './similar-ads.js';
-import {getData} from './api.js';
-import {toggleFormDisabled} from './form-switcher.js';
+import {getAds} from './api.js';
+import {toggleFormDisabled, toggleMapFiltersDisabled} from './form-switcher.js';
+import {debounce, showAlert} from './util.js';
+import {checkAllFilters} from './filter.js';
 
-//const resetFormButton = document.querySelector('.ad-form__reset');
 const COUNT_OF_ADS = 10;
+const MAP_ZOOM = 13;
 
 const MAIN_LOCATION = {
   lat: 35.675178,
   lng: 139.748876,
 };
+
+const NUMBER_AFTER_POINT = 5;
 
 const mainPinLocation = document.querySelector('#address');
 
@@ -33,12 +36,14 @@ const getLocationToString = (obj, number) => {
 };
 
 toggleFormDisabled(true);
+toggleMapFiltersDisabled(true);
 
 const map = L.map('map-canvas')
   .on('load', () => {
     toggleFormDisabled(false); // открытие - показ формы
   })
-  .setView(MAIN_LOCATION, 13);
+  .setView(MAIN_LOCATION, MAP_ZOOM);
+
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -55,10 +60,10 @@ const mainPinMarker = L.marker(
   },
 );
 mainPinMarker.addTo(map);
-mainPinLocation.value = getLocationToString(mainPinMarker.getLatLng(), 5);
+mainPinLocation.value = getLocationToString(mainPinMarker.getLatLng(), NUMBER_AFTER_POINT);
 
 mainPinMarker.on('moveend', (evt) => {
-  mainPinLocation.value = getLocationToString(evt.target.getLatLng(), 5);
+  mainPinLocation.value = getLocationToString(evt.target.getLatLng(), NUMBER_AFTER_POINT);
 });
 
 
@@ -79,16 +84,38 @@ const createMarker = (ad) => {
     .bindPopup(createPopup(ad));
 };
 
-const getAds = getData(createMarker, COUNT_OF_ADS);
-getAds();
-
 const resetMainPin = () => {
   mainPinMarker.setLatLng(MAIN_LOCATION);
-  map.setView(MAIN_LOCATION, 13);
+  map.setView(MAIN_LOCATION, MAP_ZOOM);
   map.closePopup();
 };
 
-//loadSimilarPins(map);
-//};
+let allAds = [];
+allAds = getAds();
 
-export {resetMainPin, MAIN_LOCATION, getLocationToString, mainPinLocation};
+(async function () {
+  allAds = await getAds();
+  allAds.slice(0, COUNT_OF_ADS).forEach((ad) => {
+    createMarker(ad);
+    toggleMapFiltersDisabled(false);
+  });
+})();
+
+
+const filterForm = document.querySelector('.map__filters');
+
+const filterAd = () => {
+  markerGroup.clearLayers();
+
+  const filteredAds = allAds.filter((ad) => checkAllFilters(ad));
+
+  filteredAds.slice(0, COUNT_OF_ADS).forEach((ad) => {
+    createMarker(ad);
+  });
+
+  if (filteredAds.length <= 0) {showAlert('Не удалось найти подходящие объявления');}
+};
+
+filterForm.addEventListener('change', debounce(filterAd));
+
+export {resetMainPin, MAIN_LOCATION, getLocationToString, mainPinLocation, filterAd};

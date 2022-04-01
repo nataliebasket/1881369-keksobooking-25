@@ -1,32 +1,34 @@
 import {openSuccessSendMessage, openErrorSendMessage} from './errors.js';
 import {showAlert} from './util.js';
 
-const getData = (onSuccess, count) => () => fetch(
-  'https://25.javascript.pages.academy/keksobooking/data',
-  {
-    method: 'GET',
-    credentials: 'same-origin',
-  },
-)
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
+const ServerUrl = {
+  GET_URL: 'https://25.javascript.pages.academy/keksobooking/data',
+  POST_URL: 'https://25.javascript.pages.academy/keksobooking',
+};
 
-  })
-  .then((data) => {
-    data.slice(0, count).forEach((ad) => {
-      onSuccess(ad);
-    });
-  })
-  .catch(() => {
+const getAds = async () => {
+  let response;
+  try {
+    response = await fetch(
+      ServerUrl.GET_URL,
+      {
+        method: 'GET',
+        credentials: 'same-origin',
+      },
+    );
+  }
+  catch (err) {
     showAlert('Не удалось получить данные с сервера :(');
-  });
+    return [];
+  }
 
+  const allAds = await response.json();
+  return allAds;
+};
 
 const sendData = (body) => {
   fetch(
-    'https://25.javascript.pages.academy/keksobooking',
+    ServerUrl.POST_URL,
     {
       method: 'POST',
       body,
@@ -34,7 +36,6 @@ const sendData = (body) => {
   )
     .then((response) => {
       if (response.ok) {
-        //onSuccess();
         openSuccessSendMessage();
       } else {
         openErrorSendMessage();
@@ -45,4 +46,4 @@ const sendData = (body) => {
     });
 };
 
-export {getData ,sendData};
+export {getAds, sendData};
