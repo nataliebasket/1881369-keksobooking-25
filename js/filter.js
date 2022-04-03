@@ -1,4 +1,4 @@
-const priceRanges = {
+const PRICE_RANGES = {
   any: {
     minprice : 0,
     maxprice : 100000,
@@ -35,7 +35,7 @@ const checkArrayInclude = (first, second) => {
 };
 
 const checkType = (obj, value) => value === 'any' || value === obj.offer.type;
-const checkPrice = (obj, price) => obj.offer.price <= priceRanges[price].maxprice && obj.offer.price >= priceRanges[price].minprice;
+const checkPrice = (obj, price) => obj.offer.price <= PRICE_RANGES[price].maxprice && obj.offer.price >= PRICE_RANGES[price].minprice;
 const checkRooms = (obj, value) => value === 'any' || value === String(obj.offer.rooms);
 const checkGuests = (obj, value) => value === 'any' || value === String(obj.offer.guests);
 

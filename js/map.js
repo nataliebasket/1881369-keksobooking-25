@@ -90,8 +90,7 @@ const resetMainPin = () => {
   map.closePopup();
 };
 
-let allAds = [];
-allAds = getAds();
+let allAds = getAds();
 
 (async function () {
   allAds = await getAds();

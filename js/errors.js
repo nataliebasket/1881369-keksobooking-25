@@ -16,8 +16,6 @@ const onMouseSuccessClickDown = () => {
 };
 
 const openSuccessSendMessage = () => {
-
-
   mainDocument.appendChild(successElement);
 
   mainDocument.addEventListener('keydown', onMessageSuccessEscDown);
