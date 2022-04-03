@@ -16,8 +16,6 @@ const onMouseSuccessClickDown = () => {
 };
 
 const openSuccessSendMessage = () => {
-
-
   mainDocument.appendChild(successElement);
 
   mainDocument.addEventListener('keydown', onMessageSuccessEscDown);
@@ -55,7 +53,6 @@ const openErrorSendMessage = () => {
 
   closeButton.addEventListener('click', onMouseErrorClickDown);
   mainDocument.addEventListener('keydown', onMessageErrorEscDown);
-  //errorGetElement.addEventListener('click', onMouseErrorClickDown);
 };
 
 function closeErrorSendMessage () {

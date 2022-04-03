@@ -12,18 +12,18 @@ const createPhotoElements = (photoArray, parentElement) => {
   parentElement.children[0].remove();
 };
 
-const createFeatureElements = (list, featuresArray, nameClass) => {
+const createFeatureElements = (list, featuresArray) => {
   list.forEach((listItem) => {
     const isExists = featuresArray.some((userFeature) =>
-      listItem.classList.contains(`${nameClass}${userFeature}`),
+      listItem.classList.contains(`popup__feature--${userFeature}`),
     );
     if (!isExists) {listItem.remove();}
   });
 };
 
 const checkAvailableData = (key, element) => {
-  if (typeof key === 'undefined') {
-    element.hidden = true;
+  if (!key) {
+    element.remove();
   }
 };
 
@@ -38,7 +38,7 @@ const createPopup = ({offer, author}) => {
   const adTime = adElement.querySelector('.popup__text--time');
   const adDescription = adElement.querySelector('.popup__description');
   const adAvatar = adElement.querySelector('.popup__avatar');
-  const adFeatures = adElement.querySelectorAll('.popup__features');
+  const adFeatures = adElement.querySelector('.popup__features');
   const featuresList = adElement.querySelectorAll('.popup__feature');
   const adPhotos = adElement.querySelector('.popup__photos');
 
@@ -59,19 +59,18 @@ const createPopup = ({offer, author}) => {
   checkAvailableData(offer.checkin, adTime);
   checkAvailableData(offer.description, adDescription);
   checkAvailableData(author.avatar, adAvatar);
-  checkAvailableData(offer.features, adFeatures);
-  checkAvailableData(offer.photos, adPhotos);
 
-  if (typeof offer['features'] !== 'undefined') {
-    createFeatureElements(featuresList, offer.features, 'popup__feature--');
+
+  if (offer.features) {
+    createFeatureElements(featuresList, offer.features);
   } else {
-    adFeatures.hidden = true;
+    adFeatures.remove();
   }
 
-  if (typeof offer['photos'] !== 'undefined') {
+  if (offer.photos) {
     createPhotoElements(offer.photos, adPhotos);
   } else {
-    adPhotos.hidden = true;
+    adPhotos.remove();
   }
 
   return adElement;
