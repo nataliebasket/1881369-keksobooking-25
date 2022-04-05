@@ -1,15 +1,19 @@
 import {pristine} from'./form-validator.js';
 import './slider.js';
-import {MAIN_LOCATION, getLocationToString, resetMainPin, filterAd} from './map.js';
+import {getLocationToString, resetMainPin, filterAd} from './map.js';
 import {sendData} from './api.js';
+import {openMessage} from './errors.js';
+import {FILE_TYPES, NUMBER_AFTER_POINT, MAIN_LOCATION} from './const.js';
 
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const adForm = document.querySelector('.ad-form');
 const mainPinLocation = document.querySelector('#address');
 const resetButton = document.querySelector('.ad-form__reset');
-const sendButton = document.querySelector('.ad-form__submit');
+const submitButton = document.querySelector('.ad-form__submit');
 const filterForm = document.querySelector('.map__filters');
+
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
 const avatarChooser = document.querySelector('.ad-form__field input[type=file]');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
@@ -18,9 +22,7 @@ const photoPreview = document.querySelector('.ad-form__photo');
 
 const resetAllPhoto = () => {
   avatarPreview.src = 'img/muffin-grey.svg';
-  if (document.querySelector('.ad-form__photo img')) {
-    document.querySelector('.ad-form__photo img').remove();
-  }
+  photoPreview.innerHTML = '';
 };
 
 const resetForm = (evt) => {
@@ -30,7 +32,7 @@ const resetForm = (evt) => {
   filterForm.reset();
   filterAd();
   resetAllPhoto();
-  mainPinLocation.value = getLocationToString(MAIN_LOCATION, 5);
+  mainPinLocation.value = getLocationToString(MAIN_LOCATION, NUMBER_AFTER_POINT);
   resetMainPin();
 };
 
@@ -41,15 +43,18 @@ adForm.addEventListener('submit', (evt) => {
 
   const isValid = pristine.validate();
   if (isValid) {
-    sendData(new FormData(evt.target));
-    sendButton.disabled = true;
-    resetForm(evt);
+    sendData(new FormData(evt.target),
+      () => resetForm(evt),
+      () => openMessage(successTemplate, false),
+      () => openMessage(errorTemplate, true),
+    );
+    submitButton.disabled = true;
   }
 });
 
 
 avatarChooser.addEventListener('change', () => {
-  const avatar = avatarChooser.files[0];
+  const [avatar] = avatarChooser.files;
   const fileName = avatar.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
   if (matches) {
@@ -58,19 +63,13 @@ avatarChooser.addEventListener('change', () => {
 });
 
 photoChooser.addEventListener('change', () => {
-  const photo = photoChooser.files[0];
+  const [photo] = photoChooser.files;
   const photoName = photo.name.toLowerCase();
-  const exist = document.querySelector('.ad-form__photo img');
-  const photoElement = document.createElement('img');
-  photoElement.style.width = '70px';
-  photoElement.style.height = '70px';
-  const matches = FILE_TYPES.some((it) => photoName.endsWith(it));
-  if (matches) {
-    if (exist) {
-      exist.src = URL.createObjectURL(photo);
-    } else {
-      photoElement.src = URL.createObjectURL(photo);
-      photoPreview.appendChild(photoElement);
-    }
+
+  const matchTypes = FILE_TYPES.some((it) => photoName.endsWith(it));
+
+  if (matchTypes) {
+    photoPreview.innerHTML = `<img src="${URL.createObjectURL(photo)}" width="70" height="70">`;
   }
+
 });

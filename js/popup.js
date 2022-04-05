@@ -1,5 +1,5 @@
 import {numDecline} from'./util.js';
-import {adTypesToReadable} from'./data.js';
+import {adTypesToReadable} from'./const.js';
 
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 

@@ -1,21 +1,19 @@
-import {adTypesToPrice} from'./data.js';
+import {adTypesToPrice} from'./const.js';
 import {adPrice, pristine} from'./form-validator.js';
+import {MAX_PRICE_FOR_NIGHT, PRICE_STEP} from'./const.js';
 
-//const adPrice = document.querySelector('#price');
 const sliderPrice = document.querySelector('.ad-form__slider');
 const adType = document.querySelector('#type');
 const resetButton = document.querySelector('.ad-form__reset');
-const MAX_PRICE_FOR_NIGHT = 100000;
+
 
 noUiSlider.create(sliderPrice, {
   range: {
     min: adTypesToPrice[adType.value],
-    //min: 0,
     max: MAX_PRICE_FOR_NIGHT,
   },
-  start: adTypesToPrice[adType.value],
-  //start: adPrice.placeholder,
-  step: 100,
+  start: adPrice.placeholder,
+  step: PRICE_STEP,
   format: {
     to: function (value) {
       if (Number.isInteger(value)) {

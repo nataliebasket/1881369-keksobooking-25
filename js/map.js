@@ -1,20 +1,14 @@
-import {createPopup} from './similar-ads.js';
+import {createPopup} from './popup.js';
 import {getAds} from './api.js';
 import {toggleFormDisabled, toggleMapFiltersDisabled} from './form-switcher.js';
 import {debounce, showAlert} from './util.js';
 import {checkAllFilters} from './filter.js';
+import {COUNT_OF_ADS, MAP_ZOOM, RERENDER_DELAY, MAIN_LOCATION, NUMBER_AFTER_POINT, Messages} from './const.js';
 
-const COUNT_OF_ADS = 10;
-const MAP_ZOOM = 13;
-
-const MAIN_LOCATION = {
-  lat: 35.675178,
-  lng: 139.748876,
-};
-
-const NUMBER_AFTER_POINT = 5;
+const allAds = [];
 
 const mainPinLocation = document.querySelector('#address');
+const filterForm = document.querySelector('.map__filters');
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -40,7 +34,7 @@ toggleMapFiltersDisabled(true);
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    toggleFormDisabled(false); // открытие - показ формы
+    toggleFormDisabled(false);
   })
   .setView(MAIN_LOCATION, MAP_ZOOM);
 
@@ -59,6 +53,7 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
+
 mainPinMarker.addTo(map);
 mainPinLocation.value = getLocationToString(mainPinMarker.getLatLng(), NUMBER_AFTER_POINT);
 
@@ -90,10 +85,10 @@ const resetMainPin = () => {
   map.closePopup();
 };
 
-let allAds = getAds();
 
-(async function () {
-  allAds = await getAds();
+(async () => {
+  const fetchedAds = await getAds(() => showAlert(`${Messages.GET_NO_ADS}`));
+  allAds.push(...fetchedAds);
   allAds.slice(0, COUNT_OF_ADS).forEach((ad) => {
     createMarker(ad);
     toggleMapFiltersDisabled(false);
@@ -101,20 +96,18 @@ let allAds = getAds();
 })();
 
 
-const filterForm = document.querySelector('.map__filters');
-
 const filterAd = () => {
   markerGroup.clearLayers();
-
   const filteredAds = allAds.filter((ad) => checkAllFilters(ad));
-
   filteredAds.slice(0, COUNT_OF_ADS).forEach((ad) => {
     createMarker(ad);
   });
 
-  if (filteredAds.length <= 0) {showAlert('Не удалось найти подходящие объявления');}
+  if (filteredAds.length <= 0) {
+    showAlert(`${Messages.FIND_NO_ADS}`);
+  }
 };
 
-filterForm.addEventListener('change', debounce(filterAd));
+filterForm.addEventListener('change', debounce(filterAd, RERENDER_DELAY));
 
-export {resetMainPin, MAIN_LOCATION, getLocationToString, mainPinLocation, filterAd};
+export {resetMainPin, getLocationToString, mainPinLocation, filterAd};
