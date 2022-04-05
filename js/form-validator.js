@@ -1,4 +1,4 @@
-import {adTypesToPrice} from'./data.js';
+import {adTypesToPrice, MAX_PRICE_FOR_NIGHT, ROOMS_GUESTS_OPTIONS} from'./const.js';
 
 const form = document.querySelector('.ad-form');
 const adPrice = document.querySelector('#price');
@@ -9,16 +9,8 @@ const timeIn = document.querySelector('#timein');
 const timeOut = document.querySelector('#timeout');
 const adTimeInOut = document.querySelector('.ad-form__element--time');
 
-const MAX_PRICE_FOR_NIGHT = 100000;
 
-const ROOMS_GUESTS_OPTIONS = {
-  '1': ['1'],
-  '2': ['2', '1'],
-  '3': ['3', '2', '1'],
-  '100': ['0'],
-};
-
-const pristine = new Pristine(form, {
+const pristine = window.Pristine(form, {
   classTo: 'ad-form__element',
   errorClass: 'ad-form__item--invalid',
   successClass: 'ad-form__item--valid',
@@ -27,7 +19,7 @@ const pristine = new Pristine(form, {
   errorTextClass: 'ad-form__error',
 });
 
-//const validateAdForm = () => {
+
 // Валидация цены и типа жилья
 const validateAdPrice = (value) => value >= adTypesToPrice[adType.value] && value <= MAX_PRICE_FOR_NIGHT;
 const getAdTypeErrorMessage = () => `Минимальная цена за ночь: ${adTypesToPrice[adType.value]}`;
