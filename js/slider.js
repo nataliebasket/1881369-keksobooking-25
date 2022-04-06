@@ -4,7 +4,7 @@ import {MAX_PRICE_FOR_NIGHT, PRICE_STEP} from'./const.js';
 
 const sliderPrice = document.querySelector('.ad-form__slider');
 const adType = document.querySelector('#type');
-const resetButton = document.querySelector('.ad-form__reset');
+//const resetButton = document.querySelector('.ad-form__reset');
 
 
 noUiSlider.create(sliderPrice, {
@@ -27,6 +27,10 @@ noUiSlider.create(sliderPrice, {
   },
 });
 
+const resetSlider = () => {
+  sliderPrice.noUiSlider.reset();
+};
+
 sliderPrice.noUiSlider.on('slide', () => {
   adPrice.value = sliderPrice.noUiSlider.get();
   pristine.validate(adPrice);
@@ -42,6 +46,8 @@ adType.addEventListener('change', () => {
   });
 });
 
-resetButton.addEventListener('click', () => {
-  sliderPrice.noUiSlider.reset();
-});
+// resetButton.addEventListener('click', () => {
+//   sliderPrice.noUiSlider.reset();
+// });
+
+export {resetSlider};
